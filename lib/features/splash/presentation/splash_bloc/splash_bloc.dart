@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_state.dart';
@@ -7,7 +6,6 @@ import 'splash_state.dart';
 
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
   final AuthBloc authBloc;
-  late StreamSubscription _authSubscription;
 
   SplashBloc({required this.authBloc}) : super(SplashInitial()) {
     on<SplashAuthCheckRequested>(_onSplashAuthCheckRequested);
@@ -19,34 +17,21 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       ) async {
     emit(SplashLoading());
 
-    // Wait for initial splash delay
+    // Wait for splash animation
     await Future.delayed(const Duration(seconds: 2));
 
-    // Listen to auth state changes
-    _authSubscription = authBloc.stream.listen((authState) {
-      if (authState is Authenticated) {
-        emit(SplashAuthenticated());
-      } else if (authState is Unauthenticated) {
-        emit(SplashUnauthenticated());
-      } else if (authState is AuthError) {
-        emit(SplashError(authState.message));
-      }
-    });
+    // Check current auth state directly (safe & no subscription)
+    final authState = authBloc.state;
 
-    // If auth is already in a final state, handle it
-    final currentAuthState = authBloc.state;
-    if (currentAuthState is Authenticated) {
+    if (authState is Authenticated) {
       emit(SplashAuthenticated());
-    } else if (currentAuthState is Unauthenticated) {
+    } else if (authState is Unauthenticated) {
       emit(SplashUnauthenticated());
-    } else if (currentAuthState is AuthError) {
-      emit(SplashError(currentAuthState.message));
+    } else if (authState is AuthError) {
+      emit(SplashError(authState.message));
+    } else {
+      // Fallback: assume unauthenticated
+      emit(SplashUnauthenticated());
     }
-  }
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
   }
 }

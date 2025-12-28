@@ -1,17 +1,19 @@
+import 'package:coloncare/core/utils/validators.dart';
+import 'package:coloncare/core/widgets/app_button.dart';
+import 'package:coloncare/core/widgets/app_text_field.dart';
+import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:coloncare/features/auth/presentation/blocs/auth_form_bloc/auth_form_bloc.dart';
 import 'package:coloncare/features/auth/presentation/blocs/auth_form_bloc/auth_form_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_text_field.dart';
-import '../../../../core/utils/validators.dart';
-import '../blocs/auth_bloc/auth_bloc.dart';
-import '../blocs/auth_form_bloc/auth_form_bloc.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 class RegisterForm extends StatelessWidget {
-  const RegisterForm({super.key});
+  final bool isLoading;
+  const RegisterForm({super.key, this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +58,16 @@ class RegisterForm extends StatelessWidget {
                         if (emailController.text.isEmpty ||
                             passwordController.text.isEmpty ||
                             fullNameController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill all fields'),
-                            ),
+                          // Local validation snackbar (optional)
+                          Get.snackbar(
+                            'Error',
+                            'Please fill all fields',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.orange,
+                            colorText: Colors.white,
                           );
                           return;
                         }
-
                         context.read<AuthBloc>().add(
                           RegisterRequested(
                             email: emailController.text,
@@ -72,7 +76,7 @@ class RegisterForm extends StatelessWidget {
                           ),
                         );
                       },
-                      isLoading: authState is AuthLoading,
+                      isLoading: authState is AuthLoading || isLoading,
                     );
                   },
                 ),

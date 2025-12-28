@@ -1,5 +1,6 @@
 import 'package:coloncare/features/auth/domain/entities/user_en.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 
 class HomeUserInfo extends StatelessWidget {
@@ -9,83 +10,92 @@ class HomeUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.blue.shade400,
+            Colors.blueAccent.shade400,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 12,
+            spreadRadius: 1,
+            offset: Offset(0, 8),
+          ),
+          BoxShadow(
+            color: Theme.of(context).primaryColor.withOpacity(0.03),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+            spreadRadius: 0.5,
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            // Avatar
             Container(
-              width: 70,
-              height: 70,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-              child: Icon(
-                Icons.person,
-                size: 40,
-                color: Theme.of(context).primaryColor,
+              child: CircleAvatar(
+                radius: 35,
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                child: ClipOval(
+                  child: SvgPicture.network(
+                    user.avatarUrl,
+                    width: 70,
+                    height: 70,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 20),
-            // User Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    user.fullName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        user.fullName,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.verified,
+                        color: Colors.green,
+                        size: 22,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 4),
                   Text(
-                    user.email,
+                    "Patient",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey[600],
+                      color: Colors.grey[300],
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.green,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        const Text(
-                          'Verified',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.green,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

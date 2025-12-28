@@ -1,3 +1,4 @@
+import 'package:coloncare/core/constants/assets_manager.dart';
 import 'package:coloncare/core/navigation/app_router.dart';
 import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_event.dart';
@@ -16,7 +17,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        // title: const Text('Home'),
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Image(image: const AssetImage(AssetsManager.appLogo), fit: BoxFit.contain, height: 50),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),

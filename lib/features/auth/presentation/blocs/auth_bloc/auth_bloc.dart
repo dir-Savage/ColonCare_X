@@ -1,5 +1,7 @@
+// features/auth/presentation/blocs/auth_bloc/auth_bloc.dart
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:coloncare/core/failures/failure.dart';
 import 'package:coloncare/features/auth/domain/usecases/check_auth_status_usecase.dart';
 import 'package:coloncare/features/auth/domain/usecases/login_usecase.dart';
 import 'package:coloncare/features/auth/domain/usecases/logout_usecase.dart';
@@ -31,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ResetPasswordRequested>(_onResetPasswordRequested);
     on<AuthErrorCleared>(_onAuthErrorCleared);
 
-    // Trigger initial auth check when bloc is created
+    // Trigger initial auth check
     add(AuthCheckRequested());
   }
 
@@ -63,23 +65,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
         fullName: event.fullName,
       );
-
       // Give Firebase time to update auth state
       await Future.delayed(const Duration(milliseconds: 500));
-
-      // Verify user exists
       final verifiedUser = await checkAuthStatusUseCase();
-      if (verifiedUser != null && verifiedUser.isNotEmpty) {
-        emit(Authenticated(verifiedUser));
-      } else {
-        emit(Authenticated(user));
-      }
+      emit(Authenticated(verifiedUser ?? user));
     } catch (error) {
+      String message = 'Registration failed. Please try again.';
       if (error is FirebaseAuthException) {
-        emit(AuthError(_getFirebaseErrorMessage(error)));
+        message = _getFirebaseErrorMessage(error);
       } else {
-        emit(AuthError('Registration failed: ${error.toString()}'));
+        message = error.toString();
       }
+      emit(AuthError(message));
     }
   }
 
@@ -95,11 +92,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       emit(Authenticated(user));
     } catch (error) {
+      String message = 'Login failed. Please try again.';
       if (error is FirebaseAuthException) {
-        emit(AuthError(_getFirebaseErrorMessage(error)));
+        message = _getFirebaseErrorMessage(error);
       } else {
-        emit(AuthError('Login failed: ${error.toString()}'));
+        message = error.toString();
       }
+      emit(AuthError(message));
     }
   }
 
@@ -125,37 +124,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await resetPasswordUseCase(event.email);
       emit(PasswordResetSent(event.email));
     } catch (error) {
+      String message = 'Failed to send reset email. Please try again.';
       if (error is FirebaseAuthException) {
-        emit(AuthError(_getFirebaseErrorMessage(error)));
+        message = _getFirebaseErrorMessage(error);
       } else {
-        emit(AuthError('Failed to reset password: ${error.toString()}'));
+        message = error.toString();
       }
+      emit(AuthError(message));
     }
   }
 
-  void _onAuthErrorCleared(
-      AuthErrorCleared event,
-      Emitter<AuthState> emit,
-      ) {
+  void _onAuthErrorCleared(AuthErrorCleared event, Emitter<AuthState> emit) {
     emit(const Unauthenticated());
   }
 
   String _getFirebaseErrorMessage(FirebaseAuthException error) {
     switch (error.code) {
       case 'email-already-in-use':
-        return 'Email is already in use';
+        return 'The email address is already in use by another account.';
       case 'invalid-email':
-        return 'Invalid email address';
+        return 'Invalid email address.';
       case 'weak-password':
-        return 'Password is too weak (minimum 6 characters)';
+        return 'Password is too weak (minimum 6 characters).';
       case 'user-not-found':
-        return 'No account found with this email';
+        return 'No account found with this email.';
       case 'wrong-password':
-        return 'Incorrect password';
+        return 'Incorrect password.';
       case 'network-request-failed':
-        return 'Network error. Please check your connection';
+        return 'Network error. Please check your connection.';
       default:
-        return error.message ?? 'An authentication error occurred';
+        return error.message ?? 'An authentication error occurred.';
     }
   }
 }

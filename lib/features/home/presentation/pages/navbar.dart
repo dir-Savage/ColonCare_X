@@ -3,6 +3,7 @@ import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_bloc.d
 import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:coloncare/features/home/presentation/blocs/nav_bloc/navigation_bloc.dart';
 import 'package:coloncare/features/home/presentation/pages/home_page.dart';
+import 'package:coloncare/features/predict/presentation/pages/prediction_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -12,7 +13,7 @@ class MainNavigation extends StatelessWidget {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: Text('Profile Screen', style: TextStyle(fontSize: 24))),
+    const PredictionHistoryPage(),
     const Center(child: Text('Notifications Screen', style: TextStyle(fontSize: 24))),
     const Center(child: Text('Settings Screen', style: TextStyle(fontSize: 24))),
   ];
@@ -87,13 +88,13 @@ class MainNavigation extends StatelessWidget {
                       rippleColor: Colors.blue.shade100,
                       hoverColor: Colors.grey[500]!,
                       gap: 4,
-                      activeColor: Theme.of(context).colorScheme.primary,
+                      activeColor: Colors.blue.shade400,
                       iconSize: 22,
                       haptic: true,
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       duration: const Duration(milliseconds: 500),
-                      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-                      tabBackgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                      color: Colors.blue.shade200,
+                      tabBackgroundColor: Colors.blue.withOpacity(0.1),
                       tabBorderRadius: 22.0,
                       tabs: List.generate(4, (index) {
                         final icons = [
@@ -109,7 +110,7 @@ class MainNavigation extends StatelessWidget {
                           text: texts[index],
                           border: selectedIndex == index
                               ? Border.all(
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                            color: Colors.blue.withOpacity(0.2),
                             width: 1.0,
                           )
                               : null,

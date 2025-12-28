@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   final String uid;
+  final String avatarUrl = 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Avery';
   final String email;
   final String fullName;
 

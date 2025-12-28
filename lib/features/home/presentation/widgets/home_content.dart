@@ -1,3 +1,4 @@
+import 'package:coloncare/core/constants/assets_manager.dart';
 import 'package:coloncare/core/navigation/app_router.dart';
 import 'package:coloncare/features/auth/domain/entities/user_en.dart';
 import 'package:coloncare/features/home/presentation/blocs/home_bloc/home_event.dart';
@@ -24,16 +25,19 @@ class HomeContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // User Info Card
               HomeUserInfo(user: user),
-
               const SizedBox(height: 30),
-
-              // Welcome Section
-              Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
@@ -44,22 +48,22 @@ class HomeContent extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.check_circle,
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.blue.shade400,
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            'You are logged in!',
+                            "Select",
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                              color: Colors.blue.shade400,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 15),
                       const Text(
-                        'Welcome to your secure app. Here you can manage your profile and access all the features.',
+                        'your condition for personalized diagnosis.',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey,
@@ -69,59 +73,44 @@ class HomeContent extends StatelessWidget {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 30),
-
-              // Features Section
+              const SizedBox(height: 15),
               Text(
                 'Features',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.blue.shade500,
                 ),
               ),
-              const SizedBox(height: 15),
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
+              const SizedBox(height: 10),
+              Column(
                 children: [
-                  _buildFeatureCard(
-                    context,
-                    icon: Icons.person,
-                    title: 'Profile',
-                    color: Colors.blue,
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    icon: Icons.settings,
-                    title: 'Settings',
-                    color: Colors.green,
-                  ),
                   _buildFeatureCard(
                     onTap: (){
                       Navigator.pushNamed(context, AppRouter.prediction);
                     },
                     context,
+                    imagePath: AssetsManager.colonImage,
+                    description: 'Scan your colon images for early detection \nwith advanced AI.',
                     icon: Icons.security,
-                    title: 'Security',
-                    color: Colors.orange,
+                    title: 'COLON SCAN PREDICTION',
+                    color: Colors.black,
                   ),
+                  SizedBox(height: 10),
                   _buildFeatureCard(
+                    onTap: (){
+                      Navigator.pushNamed(context, AppRouter.prediction);
+                    },
                     context,
-                    icon: Icons.help,
-                    title: 'Help',
-                    color: Colors.purple,
-                  ),
+                    imagePath: AssetsManager.chatbotCover,
+                    description: 'Get instant answers and support from our AI-powered chatbot assistant.',
+                    icon: Icons.security,
+                    title: 'START CHATBOT ASSISTANT',
+                    color: Colors.black,
+                  )
                 ],
               ),
-
               const SizedBox(height: 40),
-
-              // App Info
               Center(
                 child: Column(
                   children: [
@@ -154,28 +143,59 @@ class HomeContent extends StatelessWidget {
       BuildContext context, {
         required IconData icon,
         required String title,
+        required String description,
+        required String imagePath,
         required Color color,
         final VoidCallback? onTap,
       }) {
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
+      child: Container(
+        width: double.infinity,
+        height: 150,
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.12),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+          image: DecorationImage(
+            image: AssetImage(imagePath),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(color.withOpacity(0.26), BlendMode.darken),
+          ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(icon, size: 40, color: color),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
