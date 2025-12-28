@@ -8,18 +8,18 @@ import 'injector.dart';
 
 class AppBlocProviders extends StatelessWidget {
   final Widget child;
-
   const AppBlocProviders({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // Get all BLoCs from GetIt
+        // Only globally needed BLoCs
         BlocProvider<AuthBloc>(create: (_) => getIt<AuthBloc>()),
         BlocProvider<AuthFormBloc>(create: (_) => getIt<AuthFormBloc>()),
         BlocProvider<HomeBloc>(create: (_) => getIt<HomeBloc>()),
         BlocProvider<SplashBloc>(create: (_) => getIt<SplashBloc>()),
+        // PredictionBloc is NOT provided globally — it will be provided locally in prediction screens
       ],
       child: child,
     );

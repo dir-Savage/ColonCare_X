@@ -1,6 +1,4 @@
-// features/prediction/data/repositories/prediction_repository_impl.dart
 import 'dart:io';
-
 import 'package:coloncare/core/failures/failure.dart';
 import 'package:coloncare/features/predict/data/datasources/prediction_local_data_source.dart';
 import 'package:coloncare/features/predict/data/datasources/prediction_remote_data_source.dart';

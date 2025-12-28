@@ -1,10 +1,13 @@
+// lib/core/navigation/app_router.dart
+import 'package:coloncare/features/auth/presentation/pages/login_page.dart';
+import 'package:coloncare/features/auth/presentation/pages/register_page.dart';
+import 'package:coloncare/features/auth/presentation/pages/reset_password_page.dart';
+import 'package:coloncare/features/home/presentation/pages/home_page.dart';
 import 'package:coloncare/features/home/presentation/pages/navbar.dart';
+import 'package:coloncare/features/predict/presentation/pages/prediction_history_page.dart';
+import 'package:coloncare/features/predict/presentation/pages/prediction_page.dart';
+import 'package:coloncare/features/splash/presentation/pages/splash_page.dart';
 import 'package:flutter/material.dart';
-import '../../features/auth/presentation/pages/login_page.dart';
-import '../../features/auth/presentation/pages/register_page.dart';
-import '../../features/auth/presentation/pages/reset_password_page.dart';
-import '../../features/home/presentation/pages/home_page.dart';
-import '../../features/splash/presentation/pages/splash_page.dart';
 
 class AppRouter {
   // Route names
@@ -12,10 +15,10 @@ class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String resetPassword = '/reset-password';
-
-  //home
   static const String home = '/home';
   static const String navbar = '/navbar';
+  static const String prediction = '/prediction';
+  static const String predictionHistory = '/prediction-history';
 
   // Route generator
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -28,18 +31,24 @@ class AppRouter {
         return _buildRoute(const LoginPage(), settings);
       case register:
         return _buildRoute(const RegisterPage(), settings);
-      case home:
-        return _buildRoute(const HomePage(), settings);
       case resetPassword:
         return _buildRoute(const ResetPasswordPage(), settings);
+      case home:
+        return _buildRoute(const HomePage(), settings);
       case navbar:
-        return _buildRoute(MainNavigation(), settings);
-
+        return _buildRoute( MainNavigation(), settings);
+      case prediction:
+        return _buildRoute(const PredictionPage(), settings);
+      case predictionHistory:
+        return _buildRoute(const PredictionHistoryPage(), settings);
       default:
         return _buildRoute(
           Scaffold(
             body: Center(
-              child: Text('Route not found: ${settings.name}'),
+              child: Text(
+                'Route not found: ${settings.name}',
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           settings,
@@ -55,7 +64,7 @@ class AppRouter {
     );
   }
 
-  // Navigation helpers
+  // Navigation helpers (convenience methods)
   static Future<dynamic> pushNamed(
       BuildContext context,
       String routeName, {

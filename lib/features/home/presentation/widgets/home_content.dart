@@ -1,3 +1,4 @@
+import 'package:coloncare/core/navigation/app_router.dart';
 import 'package:coloncare/features/auth/domain/entities/user_en.dart';
 import 'package:coloncare/features/home/presentation/blocs/home_bloc/home_event.dart';
 import 'package:coloncare/features/home/presentation/widgets/home_user_info.dart';
@@ -101,6 +102,9 @@ class HomeContent extends StatelessWidget {
                     color: Colors.green,
                   ),
                   _buildFeatureCard(
+                    onTap: (){
+                      Navigator.pushNamed(context, AppRouter.prediction);
+                    },
                     context,
                     icon: Icons.security,
                     title: 'Security',
@@ -151,27 +155,31 @@ class HomeContent extends StatelessWidget {
         required IconData icon,
         required String title,
         required Color color,
+        final VoidCallback? onTap,
       }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 40, color: color),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 40, color: color),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

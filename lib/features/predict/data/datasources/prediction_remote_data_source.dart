@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coloncare/core/failures/failure.dart';
+import 'package:coloncare/core/utils/image_utils.dart';
 import 'package:coloncare/features/predict/data/models/prediction_history_entry_model.dart';
 import 'package:coloncare/features/predict/data/models/prediction_result_model.dart';
 import 'package:coloncare/features/predict/domain/failures/prediction_failure.dart';
@@ -36,7 +37,7 @@ class PredictionRemoteDataSourceImpl implements PredictionRemoteDataSource {
   final FirebaseFirestore firestore;
   final FirebaseAuth auth;
 
-  static const String _apiBaseUrl = 'http://localhost:5000/predict'; // Change to production URL
+  static const String _apiBaseUrl = 'https://dd2da8d806fe.ngrok-free.app/predict'; // Change to production URL
 
   PredictionRemoteDataSourceImpl({
     required this.httpClient,
@@ -47,8 +48,8 @@ class PredictionRemoteDataSourceImpl implements PredictionRemoteDataSource {
   @override
   Future<PredictionResultModel> predictFromImage(File imageFile) async {
     try {
-      final bytes = await imageFile.readAsBytes();
-      final base64Image = base64Encode(bytes);
+      final compressedBytes = await ImageUtils.compressImage(imageFile);
+      final base64Image = base64Encode(compressedBytes);
 
       final response = await httpClient.post(
         Uri.parse(_apiBaseUrl),
@@ -57,6 +58,7 @@ class PredictionRemoteDataSourceImpl implements PredictionRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
+        print("Prediction API failed (${response.statusCode}): ${response.body}");
         throw ApiRequestFailed(
           'Prediction API failed (${response.statusCode}): ${response.body}',
         );
