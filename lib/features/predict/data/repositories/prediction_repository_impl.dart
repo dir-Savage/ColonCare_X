@@ -20,7 +20,8 @@ class PredictionRepositoryImpl implements PredictionRepository {
   });
 
   @override
-  Future<Either<Failure, PredictionResult>> makePrediction(File imageFile) async {
+  Future<Either<Failure, PredictionResult>> makePrediction(
+      File imageFile) async {
     try {
       final currentUser = auth.currentUser;
       if (currentUser == null) {
@@ -48,7 +49,8 @@ class PredictionRepositoryImpl implements PredictionRepository {
   }
 
   @override
-  Future<Either<Failure, List<PredictionHistoryEntry>>> getPredictionHistory() async {
+  Future<Either<Failure, List<PredictionHistoryEntry>>>
+  getPredictionHistory() async {
     try {
       final currentUser = auth.currentUser;
       if (currentUser == null) {
@@ -61,7 +63,8 @@ class PredictionRepositoryImpl implements PredictionRepository {
         return Right(cached);
       }
 
-      final history = await remoteDataSource.getPredictionHistory(currentUser.uid);
+      final history =
+      await remoteDataSource.getPredictionHistory(currentUser.uid);
 
       // Optional: cache result
       await localDataSource.cacheHistory(history);

@@ -23,14 +23,14 @@ class HomeUserInfo extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withOpacity(0.3),
             blurRadius: 12,
             spreadRadius: 1,
             offset: Offset(0, 8),
           ),
           BoxShadow(
-            color: Theme.of(context).primaryColor.withOpacity(0.03),
-            blurRadius: 4,
+            color: Colors.blue.withOpacity(0.03),
+            blurRadius: 9,
             offset: Offset(0, 2),
             spreadRadius: 0.5,
           ),

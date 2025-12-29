@@ -1,16 +1,11 @@
-// features/prediction/presentation/bloc/prediction_bloc.dart
-
 import 'dart:io';
-
 import 'package:bloc/bloc.dart';
-import 'package:coloncare/core/failures/failure.dart';
 import 'package:coloncare/features/predict/domain/entities/prediction_history_entry.dart';
 import 'package:coloncare/features/predict/domain/entities/prediction_result.dart';
 import 'package:coloncare/features/predict/domain/usecases/delete_prediction_usecase.dart';
 import 'package:coloncare/features/predict/domain/usecases/get_prediction_history_usecase.dart';
 import 'package:coloncare/features/predict/domain/usecases/make_prediction_usecase.dart';
 import 'package:equatable/equatable.dart';
-import 'package:image_picker/image_picker.dart';
 
 part 'prediction_event.dart';
 part 'prediction_state.dart';
@@ -40,7 +35,11 @@ class PredictionBloc extends Bloc<PredictionEvent, PredictionState> {
       final result = await makePredictionUseCase(event.imageFile);
       result.fold(
             (failure) => emit(PredictionError(failure.message)),
-            (prediction) => emit(PredictionSuccess(prediction)),
+            (prediction) {
+          emit(PredictionSuccess(prediction));
+          // After successful prediction, reload history
+          add(const LoadPredictionHistory());
+        },
       );
     } catch (e) {
       emit(PredictionError(e.toString()));
@@ -70,15 +69,17 @@ class PredictionBloc extends Bloc<PredictionEvent, PredictionState> {
       ) async {
     try {
       final result = await deletePredictionUseCase(event.predictionId);
-      result.fold(
-            (failure) => emit(PredictionError(failure.message)),
-            (_) {
+      await result.fold(
+            (failure) async {
+          emit(HistoryError(failure.message));
+        },
+            (_) async {
           // Reload history after delete
           add(const LoadPredictionHistory());
         },
       );
     } catch (e) {
-      emit(PredictionError(e.toString()));
+      emit(HistoryError(e.toString()));
     }
   }
 }

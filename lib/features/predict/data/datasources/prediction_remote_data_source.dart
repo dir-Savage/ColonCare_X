@@ -37,7 +37,8 @@ class PredictionRemoteDataSourceImpl implements PredictionRemoteDataSource {
   final FirebaseFirestore firestore;
   final FirebaseAuth auth;
 
-  static const String _apiBaseUrl = 'https://dd2da8d806fe.ngrok-free.app/predict'; // Change to production URL
+  static const String _apiBaseUrl =
+      'https://dd2da8d806fe.ngrok-free.app/predict'; // Change to production URL
 
   PredictionRemoteDataSourceImpl({
     required this.httpClient,
@@ -58,7 +59,8 @@ class PredictionRemoteDataSourceImpl implements PredictionRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        print("Prediction API failed (${response.statusCode}): ${response.body}");
+        print(
+            "Prediction API failed (${response.statusCode}): ${response.body}");
         throw ApiRequestFailed(
           'Prediction API failed (${response.statusCode}): ${response.body}',
         );
@@ -101,7 +103,8 @@ class PredictionRemoteDataSourceImpl implements PredictionRemoteDataSource {
   }
 
   @override
-  Future<List<PredictionHistoryEntryModel>> getPredictionHistory(String userId) async {
+  Future<List<PredictionHistoryEntryModel>> getPredictionHistory(
+      String userId) async {
     try {
       final snapshot = await firestore
           .collection('predictions')

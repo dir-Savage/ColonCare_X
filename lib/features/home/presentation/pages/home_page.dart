@@ -1,14 +1,11 @@
 import 'package:coloncare/core/constants/assets_manager.dart';
-import 'package:coloncare/core/navigation/app_router.dart';
-import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_bloc.dart';
-import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_event.dart';
-import 'package:coloncare/features/auth/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:coloncare/features/home/presentation/blocs/home_bloc/home_bloc.dart';
 import 'package:coloncare/features/home/presentation/blocs/home_bloc/home_event.dart';
 import 'package:coloncare/features/home/presentation/blocs/home_bloc/home_state.dart';
 import 'package:coloncare/features/home/presentation/widgets/home_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,19 +14,30 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: const Text('Home'),
         leading: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Image(image: const AssetImage(AssetsManager.appLogo), fit: BoxFit.contain, height: 50),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
-            onPressed: () {
-              context.read<AuthBloc>().add(LogoutRequested());
-            },
-          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                child: ClipOval(
+                  child: SvgPicture.network(
+                    AssetsManager.avatarUrl,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
@@ -37,7 +45,6 @@ class HomePage extends StatelessWidget {
           if (state is HomeLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (state is HomeError) {
             return Center(
               child: Padding(
@@ -65,12 +72,9 @@ class HomePage extends StatelessWidget {
               ),
             );
           }
-
           if (state is HomeLoaded) {
             return HomeContent(user: state.user);
           }
-
-          // Default / fallback
           return const Center(child: CircularProgressIndicator());
         },
       ),

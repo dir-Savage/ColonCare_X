@@ -1,5 +1,6 @@
 import 'package:coloncare/core/constants/assets_manager.dart';
 import 'package:coloncare/core/navigation/app_router.dart';
+import 'package:coloncare/core/utils/app_animations.dart';
 import 'package:coloncare/features/auth/domain/entities/user_en.dart';
 import 'package:coloncare/features/home/presentation/blocs/home_bloc/home_event.dart';
 import 'package:coloncare/features/home/presentation/widgets/home_user_info.dart';
@@ -21,60 +22,68 @@ class HomeContent extends StatelessWidget {
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HomeUserInfo(user: user),
+              FadeInAnimation(
+                  child: HomeUserInfo(
+                      user: user,
+                  ),
+              ),
               const SizedBox(height: 30),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.blue.shade400,
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            "Select",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade400,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        'your condition for personalized diagnosis.',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
+              FadeInAnimation(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
                       ),
                     ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FadeInAnimation(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color: Colors.blue.shade400,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                "Select",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue.shade400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        const FadeInText(
+                          'your condition for personalized diagnosis.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 15),
-              Text(
+              FadeInText(
                 'Features',
                 style: TextStyle(
                   fontSize: 22,
@@ -114,7 +123,7 @@ class HomeContent extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    const Text(
+                    const FadeInText(
                       'Secure App v1.0.0',
                       style: TextStyle(
                         fontSize: 14,
@@ -122,7 +131,7 @@ class HomeContent extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(
+                    FadeInText(
                       'Logged in as: ${user.email}',
                       style: const TextStyle(
                         fontSize: 12,
@@ -150,55 +159,57 @@ class HomeContent extends StatelessWidget {
       }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        height: 150,
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.12),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-          image: DecorationImage(
-            image: AssetImage(imagePath),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(color.withOpacity(0.26), BlendMode.darken),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      description,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
-                ),
+      child: FadeInAnimation(
+        child: Container(
+          width: double.infinity,
+          height: 150,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.12),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
               ),
             ],
+            image: DecorationImage(
+              image: AssetImage(imagePath),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(color.withOpacity(0.26), BlendMode.darken),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        description,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
