@@ -33,51 +33,56 @@ class HomeContent extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               FadeInAnimation(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FadeInAnimation(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                color: Colors.blue.shade400,
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                "Select",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue.shade400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        const FadeInText(
-                          'your condition for personalized diagnosis.',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, AppRouter.bmiCalculator);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
                         ),
                       ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FadeInAnimation(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.blue.shade400,
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  "Select",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue.shade400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          const FadeInText(
+                            'your condition for personalized diagnosis.',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -108,7 +113,7 @@ class HomeContent extends StatelessWidget {
                   SizedBox(height: 10),
                   _buildFeatureCard(
                     onTap: (){
-                      Navigator.pushNamed(context, AppRouter.prediction);
+                      Navigator.pushNamed(context, AppRouter.chatbot);
                     },
                     context,
                     imagePath: AssetsManager.chatbotCover,

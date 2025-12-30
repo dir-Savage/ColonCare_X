@@ -38,7 +38,7 @@ class PredictionRemoteDataSourceImpl implements PredictionRemoteDataSource {
   final FirebaseAuth auth;
 
   static const String _apiBaseUrl =
-      'https://dd2da8d806fe.ngrok-free.app/predict'; // Change to production URL
+      'https://1b41e9a87d1c.ngrok-free.app/predict';
 
   PredictionRemoteDataSourceImpl({
     required this.httpClient,

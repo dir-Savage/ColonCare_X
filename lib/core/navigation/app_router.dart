@@ -2,12 +2,16 @@
 import 'package:coloncare/features/auth/presentation/pages/login_page.dart';
 import 'package:coloncare/features/auth/presentation/pages/register_page.dart';
 import 'package:coloncare/features/auth/presentation/pages/reset_password_page.dart';
+import 'package:coloncare/features/chatbot/presentation/pages/chatbot_page.dart';
 import 'package:coloncare/features/home/presentation/pages/home_page.dart';
 import 'package:coloncare/features/home/presentation/pages/navbar.dart';
 import 'package:coloncare/features/predict/presentation/pages/prediction_history_page.dart';
 import 'package:coloncare/features/predict/presentation/pages/prediction_page.dart';
 import 'package:coloncare/features/splash/presentation/pages/splash_page.dart';
 import 'package:flutter/material.dart';
+
+import '../../features/bmi/presentation/pages/bmi_calculator_page.dart';
+import '../../features/bmi/presentation/pages/bmi_history_page.dart';
 
 class AppRouter {
   // Route names
@@ -19,6 +23,9 @@ class AppRouter {
   static const String navbar = '/navbar';
   static const String prediction = '/prediction';
   static const String predictionHistory = '/prediction-history';
+  static const String chatbot = '/chatbot';
+  static const String bmiCalculator = '/bmi-calculator';
+  static const String bmiHistory = '/bmi-history';
 
   // Route generator
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -36,11 +43,17 @@ class AppRouter {
       case home:
         return _buildRoute(const HomePage(), settings);
       case navbar:
-        return _buildRoute( MainNavigation(), settings);
+        return _buildRoute(MainNavigation(), settings);
       case prediction:
         return _buildRoute(const PredictionPage(), settings);
       case predictionHistory:
         return _buildRoute(const PredictionHistoryPage(), settings);
+      case chatbot:
+        return _buildRoute(const ChatbotPage(), settings);
+      case bmiCalculator:
+        return _buildRoute(const BmiCalculatorPage(), settings);
+      case bmiHistory:
+        return _buildRoute(const BmiHistoryPage(), settings);
       default:
         return _buildRoute(
           Scaffold(

@@ -139,7 +139,6 @@ class PredictionHistoryPage extends StatelessWidget {
 
   Widget _buildHistoryItem(
       BuildContext context, PredictionHistoryEntry entry, int index) {
-    // Determine color based on prediction
     Color getStatusColor(String prediction) {
       switch (prediction.toLowerCase()) {
         case 'normal':

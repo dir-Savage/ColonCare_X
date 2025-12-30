@@ -1,4 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coloncare/features/bmi/data/datasources/bmi_local_data_source.dart';
+import 'package:coloncare/features/bmi/data/repositories/bmi_repository_impl.dart';
+import 'package:coloncare/features/bmi/domain/repositories/bmi_repository.dart';
+import 'package:coloncare/features/bmi/domain/usecases/calculate_bmi_usecase.dart';
+import 'package:coloncare/features/bmi/domain/usecases/get_bmi_history_usecase.dart';
+import 'package:coloncare/features/bmi/presentation/blocs/bmi_bloc.dart';
+import 'package:coloncare/features/chatbot/data/datasources/chatbot_local_data_source.dart';
+import 'package:coloncare/features/chatbot/data/datasources/chatbot_remote_data_source.dart';
+import 'package:coloncare/features/chatbot/data/repositories/chatbot_repository_impl.dart';
+import 'package:coloncare/features/chatbot/domain/repositories/chatbot_repository.dart';
+import 'package:coloncare/features/chatbot/domain/usecase/send_chat_message_usecase.dart';
+import 'package:coloncare/features/chatbot/presentation/blocs/chatbot_bloc.dart';
 import 'package:coloncare/features/predict/data/datasources/prediction_local_data_source.dart';
 import 'package:coloncare/features/predict/data/datasources/prediction_remote_data_source.dart';
 import 'package:coloncare/features/predict/data/repositories/prediction_repository_impl.dart';
@@ -37,6 +49,8 @@ Future<void> init() async {
   await _mainInject();
   await _authInject();
   await _predictionInject();
+  await _chatbotInject();
+  await _bmiInject();
 }
 
 Future<void> _mainInject() async {
@@ -92,6 +106,72 @@ Future<void> _predictionInject() async {
   );
 }
 
+
+
+Future<void> _chatbotInject() async {
+  // Data Sources
+  getIt.registerLazySingleton<ChatbotRemoteDataSource>(
+        () => ChatbotRemoteDataSourceImpl(
+      httpClient: http.Client(),
+    ),
+  );
+
+  getIt.registerLazySingleton<ChatbotLocalDataSource>(
+        () => const ChatbotLocalDataSourceImpl(),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<ChatbotRepository>(
+        () => ChatbotRepositoryImpl(
+      remoteDataSource: getIt<ChatbotRemoteDataSource>(),
+      localDataSource: getIt<ChatbotLocalDataSource>(),
+    ),
+  );
+
+  // Use Cases
+  getIt.registerLazySingleton<SendChatMessageUseCase>(
+        () => SendChatMessageUseCase(getIt<ChatbotRepository>()),
+  );
+
+  // BLoC (factory - new instance per screen)
+  getIt.registerFactory<ChatbotBloc>(
+        () => ChatbotBloc(
+      sendChatMessageUseCase: getIt<SendChatMessageUseCase>(),
+    ),
+  );
+}
+
+
+Future<void> _bmiInject() async {
+  // Data Sources
+  getIt.registerLazySingleton<BmiLocalDataSource>(
+        () => BmiLocalDataSourceImpl(),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<BmiRepository>(
+        () => BmiRepositoryImpl(
+      localDataSource: getIt<BmiLocalDataSource>(),
+    ),
+  );
+
+  // Use Cases
+  getIt.registerLazySingleton<CalculateBmiUseCase>(
+        () => CalculateBmiUseCase(getIt<BmiRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetBmiHistoryUseCase>(
+        () => GetBmiHistoryUseCase(getIt<BmiRepository>()),
+  );
+
+  // BLoC (factory - new instance per screen)
+  getIt.registerFactory<BmiBloc>(
+        () => BmiBloc(
+      calculateBmiUseCase: getIt<CalculateBmiUseCase>(),
+      getBmiHistoryUseCase: getIt<GetBmiHistoryUseCase>(),
+    ),
+  );
+}
 
 
 Future<void> _authInject() async {
